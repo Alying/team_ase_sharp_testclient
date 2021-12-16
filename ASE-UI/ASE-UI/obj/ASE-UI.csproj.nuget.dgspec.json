@@ -1,21 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\muzhiyang\\source\\repos\\ASE-UI\\ASE-UI\\ASE-UI.csproj": {}
+    "C:\\Users\\muzhi\\Desktop\\team_ase_sharp_testclient\\ASE-UI\\ASE-UI\\ASE-UI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\muzhiyang\\source\\repos\\ASE-UI\\ASE-UI\\ASE-UI.csproj": {
+    "C:\\Users\\muzhi\\Desktop\\team_ase_sharp_testclient\\ASE-UI\\ASE-UI\\ASE-UI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\muzhiyang\\source\\repos\\ASE-UI\\ASE-UI\\ASE-UI.csproj",
+        "projectUniqueName": "C:\\Users\\muzhi\\Desktop\\team_ase_sharp_testclient\\ASE-UI\\ASE-UI\\ASE-UI.csproj",
         "projectName": "ASE-UI",
-        "projectPath": "C:\\Users\\muzhiyang\\source\\repos\\ASE-UI\\ASE-UI\\ASE-UI.csproj",
-        "packagesPath": "C:\\Users\\muzhiyang\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\muzhiyang\\source\\repos\\ASE-UI\\ASE-UI\\obj\\",
+        "projectPath": "C:\\Users\\muzhi\\Desktop\\team_ase_sharp_testclient\\ASE-UI\\ASE-UI\\ASE-UI.csproj",
+        "packagesPath": "C:\\Users\\muzhi\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\muzhi\\Desktop\\team_ase_sharp_testclient\\ASE-UI\\ASE-UI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
         "configFilePaths": [
-          "C:\\Users\\muzhiyang\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\muzhi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -63,7 +69,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
