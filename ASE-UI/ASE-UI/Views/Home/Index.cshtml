@@ -1,0 +1,21 @@
+﻿@model ASE_UI.Models.IndexViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<dev>
+     @using (Html.BeginForm("GetRecommendation", "Home")){
+         <p>CountryCode</p>
+         <p>@Html.TextBox("CountryCode")</p>
+         <p>State</p>
+         <p>@Html.TextBox("State") <br />   
+         <input type="submit" value="Check" /></p> 
+        } 
+
+        @using (Html.BeginForm("Index", "Home"))
+        {
+            <input type="submit" value="Clear" />
+        }
+     
+     @Html.DisplayFor(m => m.Result)
+</dev>

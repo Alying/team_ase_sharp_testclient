@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "RnIYfultfx+uqT5EK1psRH84DFmph3QCjyQcotGxQkKNjTE2iSc9Aaajg5MnESIjGEFo3q+k7lNTsf8HyehVzg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\muzhiyang\\source\\repos\\ASE-UI\\ASE-UI\\ASE-UI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\muzhiyang\\.nuget\\packages\\restsharp\\106.15.0\\restsharp.106.15.0.nupkg.sha512"
+  ],
+  "logs": []
+}
