@@ -20,7 +20,18 @@ else
             <p>State</p>
             <p>
                 @Html.TextBox("State") <br />
-                <input type="submit" value="Check" />
+                <input type="submit" value="CheckRecommendation" />
+            </p>
+        }
+        
+        @using (Html.BeginForm("GetComment", "Home"))
+        {
+            <p>CountryCode</p>
+            <p>@Html.TextBox("CountryCode")</p>
+            <p>State</p>
+            <p>
+                @Html.TextBox("State") <br />
+                <input type="submit" value="CheckComment" />
             </p>
         }
 
