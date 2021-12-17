@@ -28,6 +28,18 @@ namespace ASE_UI.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Clear()
+        {
+            await HttpContext.Session.LoadAsync();
+            
+            if(HttpContext.Session.TryGetValue("code", out var byteValue))
+            {
+                return View("Index", new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) });
+            }
+
+            return View();
+        }
+
         public IActionResult LogOut()
         {
             return View("Index", new IndexViewModel());
@@ -90,17 +102,6 @@ namespace ASE_UI.Controllers
 
             model.Result = "CountryCode and State must be both provided or both empty.";
             return View("Index", model);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         private async Task<string> GetDefaultRecommendationAsync() 
