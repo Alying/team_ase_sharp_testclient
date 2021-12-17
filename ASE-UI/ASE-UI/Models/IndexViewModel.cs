@@ -8,5 +8,7 @@ namespace ASE_UI.Models
     public class IndexViewModel
     {
         public string Result { get; set; }
+
+        public string Token { get; set; }
     }
 }

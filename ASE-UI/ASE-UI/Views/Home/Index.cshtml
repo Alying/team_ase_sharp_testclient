@@ -3,19 +3,32 @@
     ViewData["Title"] = "Home Page";
 }
 
-<dev>
-     @using (Html.BeginForm("GetRecommendation", "Home")){
-         <p>CountryCode</p>
-         <p>@Html.TextBox("CountryCode")</p>
-         <p>State</p>
-         <p>@Html.TextBox("State") <br />   
-         <input type="submit" value="Check" /></p> 
-        } 
+@if (Model == null || Model.Token == null || string.IsNullOrEmpty(Model.Token))
+{
+    @Html.ActionLink("LogIn", "Auth")
+}
+else
+{
+    <h3>Loggedin</h3>
+    @Html.ActionLink("LogOut", "LogOut")
 
-        @using (Html.BeginForm("Index", "Home"))
+    <dev>
+        @using (Html.BeginForm("GetRecommendation", "Home"))
+        {
+            <p>CountryCode</p>
+            <p>@Html.TextBox("CountryCode")</p>
+            <p>State</p>
+            <p>
+                @Html.TextBox("State") <br />
+                <input type="submit" value="Check" />
+            </p>
+        }
+
+        @using (Html.BeginForm("Clear", "Home"))
         {
             <input type="submit" value="Clear" />
         }
-     
-     @Html.DisplayFor(m => m.Result)
-</dev>
+
+        @Html.DisplayFor(m => m.Result)
+    </dev>
+}
