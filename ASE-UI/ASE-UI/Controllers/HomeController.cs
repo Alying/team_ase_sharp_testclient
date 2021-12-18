@@ -140,12 +140,6 @@ namespace ASE_UI.Controllers
         {
             var client = new RestClient("https://localhost:5001");
             var request = new RestRequest($"api/comment/country/{countryCode}/state/{state}", Method.GET);
-            request.AddHeader("Accept", "application/json");
-            // request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(new
-            {
-                UserIdStr = "NewUser1"
-            });
 
             var result = await client.ExecuteAsync(request);
             return result.Content;
