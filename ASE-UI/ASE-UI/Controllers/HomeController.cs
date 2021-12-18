@@ -1,13 +1,9 @@
-﻿using ASE_UI.Models;
+﻿using System.Text;
+using System.Threading.Tasks;
+using ASE_UI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ASE_UI.Controllers
 {
@@ -31,8 +27,8 @@ namespace ASE_UI.Controllers
         public async Task<IActionResult> Clear()
         {
             await HttpContext.Session.LoadAsync();
-            
-            if(HttpContext.Session.TryGetValue("code", out var byteValue))
+
+            if (HttpContext.Session.TryGetValue("code", out var byteValue))
             {
                 return View("Index", new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) });
             }
@@ -54,7 +50,7 @@ namespace ASE_UI.Controllers
         public async Task<IActionResult> ExchangeToken()
         {
             var queries = Request.Query;
-            if (!queries.ContainsKey("code")) 
+            if (!queries.ContainsKey("code"))
             {
                 return View();
             }
@@ -70,16 +66,16 @@ namespace ASE_UI.Controllers
             request.AddParameter("grant_type", "authorization_code");
 
             var result = await client.ExecuteAsync<TokenResponse>(request);
-            
+
             HttpContext.Session.Set("code", Encoding.ASCII.GetBytes(result.Data.access_token));
             await HttpContext.Session.CommitAsync();
 
             return View("Index", new IndexViewModel { Token = result.Data.access_token });
         }
 
-        public async Task<IActionResult> GetRecommendation(string countryCode, string state) 
+        public async Task<IActionResult> GetRecommendation(string countryCode, string state)
         {
-             await HttpContext.Session.LoadAsync();
+            await HttpContext.Session.LoadAsync();
             var token = HttpContext.Session.TryGetValue("code", out var byteValue);
 
             var model = new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) };
@@ -93,7 +89,7 @@ namespace ASE_UI.Controllers
                 return View("Index", model);
             }
 
-            if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state)) 
+            if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state))
             {
                 var result = await GetSpecificRecommendationAsync(countryCode, state);
                 model.Result = result;
@@ -104,7 +100,7 @@ namespace ASE_UI.Controllers
             return View("Index", model);
         }
 
-        private async Task<string> GetDefaultRecommendationAsync() 
+        private async Task<string> GetDefaultRecommendationAsync()
         {
             var client = new RestClient("https://localhost:5001");
             var request = new RestRequest("api/recommendations", Method.GET);
@@ -117,6 +113,66 @@ namespace ASE_UI.Controllers
         {
             var client = new RestClient("https://localhost:5001");
             var request = new RestRequest($"api/recommendations/country/{countryCode}/state/{state}", Method.GET);
+
+            var result = await client.ExecuteAsync(request);
+            return result.Content;
+        }
+
+        public async Task<IActionResult> GetComment(string countryCode, string state)
+        {
+            await HttpContext.Session.LoadAsync();
+            var token = HttpContext.Session.TryGetValue("code", out var byteValue);
+
+            var model = new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) };
+
+            if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state))
+            {
+                var result = await GetSpecificCommentAsync(countryCode, state);
+                model.Result = result;
+                return View("Index", model);
+            }
+
+            model.Result = "CountryCode and State must be both provided or both empty.";
+            return View("Index", model);
+        }
+
+        private async Task<string> GetSpecificCommentAsync(string countryCode, string state)
+        {
+            var client = new RestClient("https://localhost:5001");
+            var request = new RestRequest($"api/comment/country/{countryCode}/state/{state}", Method.GET);
+
+            var result = await client.ExecuteAsync(request);
+            return result.Content;
+        }
+
+        public async Task<IActionResult> PostComment(string countryCode, string state, string comment)
+        {
+            await HttpContext.Session.LoadAsync();
+            var token = HttpContext.Session.TryGetValue("code", out var byteValue);
+
+            var model = new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) };
+
+            if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state))
+            {
+                var result = await PostSpecificCommentAsync(countryCode, state, comment);
+                model.Result = result;
+                return View("Index", model);
+            }
+
+            model.Result = "CountryCode and State must be both provided or both empty.";
+            return View("Index", model);
+        }
+
+        private async Task<string> PostSpecificCommentAsync(string countryCode, string state, string comment)
+        {
+            var client = new RestClient("https://localhost:5001");
+            var request = new RestRequest($"api/comment/country/{countryCode}/state/{state}", Method.POST);
+            request.AddHeader("Accept", "application/json");
+            request.AddJsonBody(new
+            {
+                CommentStr = comment,
+                UserIdStr = "NewUser1"
+            });
 
             var result = await client.ExecuteAsync(request);
             return result.Content;
