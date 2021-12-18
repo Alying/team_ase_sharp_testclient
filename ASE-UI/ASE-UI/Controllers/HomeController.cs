@@ -140,10 +140,48 @@ namespace ASE_UI.Controllers
         {
             var client = new RestClient("https://localhost:5001");
             var request = new RestRequest($"api/comment/country/{countryCode}/state/{state}", Method.GET);
+            request.AddHeader("Accept", "application/json");
+            // request.RequestFormat = DataFormat.Json;
+            request.AddJsonBody(new
+            {
+                UserIdStr = "NewUser1"
+            });
 
             var result = await client.ExecuteAsync(request);
             return result.Content;
         }
 
+        public async Task<IActionResult> PostComment(string countryCode, string state)
+        {
+            await HttpContext.Session.LoadAsync();
+            var token = HttpContext.Session.TryGetValue("code", out var byteValue);
+
+            var model = new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) };
+
+            if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state))
+            {
+                var result = await PostSpecificCommentAsync(countryCode, state);
+                model.Result = result;
+                return View("Index", model);
+            }
+
+            model.Result = "CountryCode and State must be both provided or both empty.";
+            return View("Index", model);
+        }
+
+        private async Task<string> PostSpecificCommentAsync(string countryCode, string state)
+        {
+            var client = new RestClient("https://localhost:5001");
+            var request = new RestRequest($"api/comment/country/{countryCode}/state/{state}", Method.POST);
+            request.AddHeader("Accept", "application/json");
+            request.AddJsonBody(new
+            {
+                CommentStr = "hii2",
+                UserIdStr = "NewUser1"
+            });
+
+            var result = await client.ExecuteAsync(request);
+            return result.Content;
+        }
     }
 }

@@ -35,6 +35,18 @@ else
             </p>
         }
 
+        @using (Html.BeginForm("PostComment", "Home"))
+        {
+            <p>CountryCode</p>
+            <p>@Html.TextBox("CountryCode")</p>
+            <p>State</p>
+            <p>
+                @Html.TextBox("State") <br />
+                <input type="submit" value="PostComment" />
+            </p>
+        }
+
+
         @using (Html.BeginForm("Clear", "Home"))
         {
             <input type="submit" value="Clear" />
