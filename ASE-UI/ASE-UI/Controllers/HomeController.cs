@@ -152,12 +152,12 @@ namespace ASE_UI.Controllers
             if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state))
             {
                 var result = await GetSpecificCommentAsync(countryCode, state);
-                model.RecommendationResult = result;
-                return View("Index", model);
+                model.CommentResult = result;
+                return View("Comment", model);
             }
 
-            model.RecommendationResult = "CountryCode and State must be both provided or both empty.";
-            return View("Index", model);
+            model.CommentResult = "CountryCode and State must be both provided or both empty.";
+            return View("Comment", model);
         }
 
         private async Task<string> GetSpecificCommentAsync(string countryCode, string state)
@@ -172,22 +172,23 @@ namespace ASE_UI.Controllers
         public async Task<IActionResult> PostComment(string countryCode, string state, string comment)
         {
             await HttpContext.Session.LoadAsync();
-            var token = HttpContext.Session.TryGetValue("code", out var byteValue);
+            HttpContext.Session.TryGetValue("code", out var byteValue);
+            var token = Encoding.ASCII.GetString(byteValue);
 
-            var model = new AseViewModel { Token = Encoding.ASCII.GetString(byteValue) };
+            var model = new AseViewModel { Token = token };
 
             if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state))
             {
-                var result = await PostSpecificCommentAsync(countryCode, state, comment);
-                model.RecommendationResult = result;
-                return View("Index", model);
+                var result = await PostSpecificCommentAsync(countryCode, state, comment, token);
+                model.CommentResult = result;
+                return View("Comment", model);
             }
 
-            model.RecommendationResult = "CountryCode and State must be both provided or both empty.";
-            return View("Index", model);
+            model.CommentResult = "CountryCode and State must be both provided or both empty.";
+            return View("Comment", model);
         }
 
-        private async Task<string> PostSpecificCommentAsync(string countryCode, string state, string comment)
+        private async Task<string> PostSpecificCommentAsync(string countryCode, string state, string comment, string token)
         {
             var client = new RestClient("https://localhost:5001");
             var request = new RestRequest($"api/comment/country/{countryCode}/state/{state}", Method.POST);
@@ -197,6 +198,7 @@ namespace ASE_UI.Controllers
                 CommentStr = comment,
                 UserIdStr = "NewUser1"
             });
+            request.AddHeader("bearer", token);
 
             var result = await client.ExecuteAsync(request);
             return result.Content;
