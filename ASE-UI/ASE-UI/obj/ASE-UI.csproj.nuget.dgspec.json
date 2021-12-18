@@ -46,6 +46,10 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "dependencies": {
+            "Google.Apis.Auth": {
+              "target": "Package",
+              "version": "[1.55.0, )"
+            },
             "RestSharp": {
               "target": "Package",
               "version": "[106.15.0, )"

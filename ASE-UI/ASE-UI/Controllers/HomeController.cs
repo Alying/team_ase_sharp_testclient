@@ -24,13 +24,37 @@ namespace ASE_UI.Controllers
             return View();
         }
 
+        public async Task<IActionResult> CommentIndex()
+        {
+            await HttpContext.Session.LoadAsync();
+
+            if (HttpContext.Session.TryGetValue("code", out var byteValue))
+            {
+                return View("Comment", new AseViewModel { Token = Encoding.ASCII.GetString(byteValue) });
+            }
+
+            return View("Comment");
+        }
+
+        public async Task<IActionResult> IndexTab()
+        {
+            await HttpContext.Session.LoadAsync();
+
+            if (HttpContext.Session.TryGetValue("code", out var byteValue))
+            {
+                return View("Index", new AseViewModel { Token = Encoding.ASCII.GetString(byteValue) });
+            }
+
+            return View("Index");
+        }
+
         public async Task<IActionResult> Clear()
         {
             await HttpContext.Session.LoadAsync();
 
             if (HttpContext.Session.TryGetValue("code", out var byteValue))
             {
-                return View("Index", new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) });
+                return View("Index", new AseViewModel { Token = Encoding.ASCII.GetString(byteValue) });
             }
 
             return View();
@@ -38,7 +62,7 @@ namespace ASE_UI.Controllers
 
         public IActionResult LogOut()
         {
-            return View("Index", new IndexViewModel());
+            return View("Index", new AseViewModel());
         }
 
         public IActionResult Auth()
@@ -70,7 +94,7 @@ namespace ASE_UI.Controllers
             HttpContext.Session.Set("code", Encoding.ASCII.GetBytes(result.Data.access_token));
             await HttpContext.Session.CommitAsync();
 
-            return View("Index", new IndexViewModel { Token = result.Data.access_token });
+            return View("Index", new AseViewModel { Token = result.Data.access_token });
         }
 
         public async Task<IActionResult> GetRecommendation(string countryCode, string state)
@@ -78,25 +102,25 @@ namespace ASE_UI.Controllers
             await HttpContext.Session.LoadAsync();
             var token = HttpContext.Session.TryGetValue("code", out var byteValue);
 
-            var model = new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) };
+            var model = new AseViewModel { Token = Encoding.ASCII.GetString(byteValue) };
 
             if (string.IsNullOrEmpty(countryCode) && string.IsNullOrEmpty(state))
             {
 
                 var defaultResult = await GetDefaultRecommendationAsync();
 
-                model.Result = defaultResult;
+                model.RecommendationResult = defaultResult;
                 return View("Index", model);
             }
 
             if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state))
             {
                 var result = await GetSpecificRecommendationAsync(countryCode, state);
-                model.Result = result;
+                model.RecommendationResult = result;
                 return View("Index", model);
             }
 
-            model.Result = "CountryCode and State must be both provided or both empty.";
+            model.RecommendationResult = "CountryCode and State must be both provided or both empty.";
             return View("Index", model);
         }
 
@@ -123,16 +147,16 @@ namespace ASE_UI.Controllers
             await HttpContext.Session.LoadAsync();
             var token = HttpContext.Session.TryGetValue("code", out var byteValue);
 
-            var model = new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) };
+            var model = new AseViewModel { Token = Encoding.ASCII.GetString(byteValue) };
 
             if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state))
             {
                 var result = await GetSpecificCommentAsync(countryCode, state);
-                model.Result = result;
+                model.RecommendationResult = result;
                 return View("Index", model);
             }
 
-            model.Result = "CountryCode and State must be both provided or both empty.";
+            model.RecommendationResult = "CountryCode and State must be both provided or both empty.";
             return View("Index", model);
         }
 
@@ -150,16 +174,16 @@ namespace ASE_UI.Controllers
             await HttpContext.Session.LoadAsync();
             var token = HttpContext.Session.TryGetValue("code", out var byteValue);
 
-            var model = new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) };
+            var model = new AseViewModel { Token = Encoding.ASCII.GetString(byteValue) };
 
             if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state))
             {
                 var result = await PostSpecificCommentAsync(countryCode, state, comment);
-                model.Result = result;
+                model.RecommendationResult = result;
                 return View("Index", model);
             }
 
-            model.Result = "CountryCode and State must be both provided or both empty.";
+            model.RecommendationResult = "CountryCode and State must be both provided or both empty.";
             return View("Index", model);
         }
 

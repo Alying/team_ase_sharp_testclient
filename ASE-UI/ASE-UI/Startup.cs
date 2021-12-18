@@ -66,6 +66,9 @@ namespace ASE_UI
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(name: "Comment",
+                    pattern: "Home/Comment",
+                    defaults: new { controller = "Home", action = "CommentIndex" });
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
