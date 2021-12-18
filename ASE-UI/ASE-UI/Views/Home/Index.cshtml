@@ -20,7 +20,7 @@ else
             <p>State</p>
             <p>
                 @Html.TextBox("State") <br />
-                <input type="submit" value="CheckRecommendation" />
+                <input type="submit" value="GetRecommendations" />
             </p>
         }
         
@@ -40,8 +40,10 @@ else
             <p>CountryCode</p>
             <p>@Html.TextBox("CountryCode")</p>
             <p>State</p>
+            <p>@Html.TextBox("State")</p>
+            <p>Comment</p>
             <p>
-                @Html.TextBox("State") <br />
+                @Html.TextBox("Comment") <br />
                 <input type="submit" value="PostComment" />
             </p>
         }
