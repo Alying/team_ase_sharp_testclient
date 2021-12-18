@@ -156,7 +156,7 @@ namespace ASE_UI.Controllers
                 return View("Comment", model);
             }
 
-            model.CommentResult = "CountryCode and State must be both provided or both empty.";
+            model.CommentResult = "CountryCode and State must be both provided.";
             return View("Comment", model);
         }
 
@@ -184,7 +184,7 @@ namespace ASE_UI.Controllers
                 return View("Comment", model);
             }
 
-            model.CommentResult = "CountryCode and State must be both provided or both empty.";
+            model.CommentResult = "CountryCode and State must be both provided.";
             return View("Comment", model);
         }
 
@@ -198,7 +198,7 @@ namespace ASE_UI.Controllers
                 CommentStr = comment,
                 UserIdStr = "NewUser1"
             });
-            request.AddHeader("bearer", token);
+            request.AddHeader("Authorization", $"Bearer {token}");
 
             var result = await client.ExecuteAsync(request);
             return result.Content;
