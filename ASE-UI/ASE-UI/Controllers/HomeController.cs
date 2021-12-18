@@ -24,13 +24,37 @@ namespace ASE_UI.Controllers
             return View();
         }
 
+        public async Task<IActionResult> CommentIndex()
+        {
+            await HttpContext.Session.LoadAsync();
+
+            if (HttpContext.Session.TryGetValue("code", out var byteValue))
+            {
+                return View("Comment", new AseViewModel { Token = Encoding.ASCII.GetString(byteValue) });
+            }
+
+            return View("Comment");
+        }
+
+        public async Task<IActionResult> IndexTab()
+        {
+            await HttpContext.Session.LoadAsync();
+
+            if (HttpContext.Session.TryGetValue("code", out var byteValue))
+            {
+                return View("Index", new AseViewModel { Token = Encoding.ASCII.GetString(byteValue) });
+            }
+
+            return View("Index");
+        }
+
         public async Task<IActionResult> Clear()
         {
             await HttpContext.Session.LoadAsync();
 
             if (HttpContext.Session.TryGetValue("code", out var byteValue))
             {
-                return View("Index", new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) });
+                return View("Index", new AseViewModel { Token = Encoding.ASCII.GetString(byteValue) });
             }
 
             return View();
@@ -38,7 +62,7 @@ namespace ASE_UI.Controllers
 
         public IActionResult LogOut()
         {
-            return View("Index", new IndexViewModel());
+            return View("Index", new AseViewModel());
         }
 
         public IActionResult Auth()
@@ -70,7 +94,7 @@ namespace ASE_UI.Controllers
             HttpContext.Session.Set("code", Encoding.ASCII.GetBytes(result.Data.access_token));
             await HttpContext.Session.CommitAsync();
 
-            return View("Index", new IndexViewModel { Token = result.Data.access_token });
+            return View("Index", new AseViewModel { Token = result.Data.access_token });
         }
 
         public async Task<IActionResult> GetRecommendation(string countryCode, string state)
@@ -78,25 +102,25 @@ namespace ASE_UI.Controllers
             await HttpContext.Session.LoadAsync();
             var token = HttpContext.Session.TryGetValue("code", out var byteValue);
 
-            var model = new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) };
+            var model = new AseViewModel { Token = Encoding.ASCII.GetString(byteValue) };
 
             if (string.IsNullOrEmpty(countryCode) && string.IsNullOrEmpty(state))
             {
 
                 var defaultResult = await GetDefaultRecommendationAsync();
 
-                model.Result = defaultResult;
+                model.RecommendationResult = defaultResult;
                 return View("Index", model);
             }
 
             if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state))
             {
                 var result = await GetSpecificRecommendationAsync(countryCode, state);
-                model.Result = result;
+                model.RecommendationResult = result;
                 return View("Index", model);
             }
 
-            model.Result = "CountryCode and State must be both provided or both empty.";
+            model.RecommendationResult = "CountryCode and State must be both provided or both empty.";
             return View("Index", model);
         }
 
@@ -123,17 +147,17 @@ namespace ASE_UI.Controllers
             await HttpContext.Session.LoadAsync();
             var token = HttpContext.Session.TryGetValue("code", out var byteValue);
 
-            var model = new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) };
+            var model = new AseViewModel { Token = Encoding.ASCII.GetString(byteValue) };
 
             if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state))
             {
                 var result = await GetSpecificCommentAsync(countryCode, state);
-                model.Result = result;
-                return View("Index", model);
+                model.CommentResult = result;
+                return View("Comment", model);
             }
 
-            model.Result = "CountryCode and State must be both provided or both empty.";
-            return View("Index", model);
+            model.CommentResult = "CountryCode and State must be both provided.";
+            return View("Comment", model);
         }
 
         private async Task<string> GetSpecificCommentAsync(string countryCode, string state)
@@ -148,22 +172,23 @@ namespace ASE_UI.Controllers
         public async Task<IActionResult> PostComment(string countryCode, string state, string comment)
         {
             await HttpContext.Session.LoadAsync();
-            var token = HttpContext.Session.TryGetValue("code", out var byteValue);
+            HttpContext.Session.TryGetValue("code", out var byteValue);
+            var token = Encoding.ASCII.GetString(byteValue);
 
-            var model = new IndexViewModel { Token = Encoding.ASCII.GetString(byteValue) };
+            var model = new AseViewModel { Token = token };
 
             if (!string.IsNullOrEmpty(countryCode) && !string.IsNullOrEmpty(state))
             {
-                var result = await PostSpecificCommentAsync(countryCode, state, comment);
-                model.Result = result;
-                return View("Index", model);
+                var result = await PostSpecificCommentAsync(countryCode, state, comment, token);
+                model.CommentResult = result;
+                return View("Comment", model);
             }
 
-            model.Result = "CountryCode and State must be both provided or both empty.";
-            return View("Index", model);
+            model.CommentResult = "CountryCode and State must be both provided.";
+            return View("Comment", model);
         }
 
-        private async Task<string> PostSpecificCommentAsync(string countryCode, string state, string comment)
+        private async Task<string> PostSpecificCommentAsync(string countryCode, string state, string comment, string token)
         {
             var client = new RestClient("https://localhost:5001");
             var request = new RestRequest($"api/comment/country/{countryCode}/state/{state}", Method.POST);
@@ -173,6 +198,7 @@ namespace ASE_UI.Controllers
                 CommentStr = comment,
                 UserIdStr = "NewUser1"
             });
+            request.AddHeader("Authorization", $"Bearer {token}");
 
             var result = await client.ExecuteAsync(request);
             return result.Content;

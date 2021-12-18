@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 
 namespace ASE_UI.Models
 {
-    public class IndexViewModel
+    public class AseViewModel
     {
-        public string Result { get; set; }
+        public string RecommendationResult { get; set; }
+
+        public string CommentResult { get; set; }
 
         public string Token { get; set; }
     }

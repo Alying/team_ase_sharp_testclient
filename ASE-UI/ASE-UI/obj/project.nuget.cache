@@ -1,9 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "k63MQBYZ9XfBcbLxu8U0x7fwk+w6O2+iVNKIp70bWTQ34tscsF1bO9OlIwlXoEaJGn3nwDXBRGxPbrtFz+1cjw==",
+  "dgSpecHash": "G6IRg8j7O8KVYILtm7OcJ9qCxInl7gYgKs7vfi+hMhqPldYKjvE0hAO4e8hVx/dSHdwvj1dz/2bjgYZ9M5ENAQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\muzhi\\Desktop\\team_ase_sharp_testclient\\ASE-UI\\ASE-UI\\ASE-UI.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\muzhi\\.nuget\\packages\\google.apis\\1.55.0\\google.apis.1.55.0.nupkg.sha512",
+    "C:\\Users\\muzhi\\.nuget\\packages\\google.apis.auth\\1.55.0\\google.apis.auth.1.55.0.nupkg.sha512",
+    "C:\\Users\\muzhi\\.nuget\\packages\\google.apis.core\\1.55.0\\google.apis.core.1.55.0.nupkg.sha512",
+    "C:\\Users\\muzhi\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\muzhi\\.nuget\\packages\\restsharp\\106.15.0\\restsharp.106.15.0.nupkg.sha512"
   ],
   "logs": []
